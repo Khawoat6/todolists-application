@@ -39,7 +39,7 @@ const stackPage5 = createStackNavigator({
 
 
 const navigator = createBottomTabNavigator({
-    Home:{screen:stackPage1,navigationOptions: {  
+    Home:{screen:stackPage1,navigationOptions: {
     }},
     Search:{screen:stackPage2,navigationOptions: {
     }},
@@ -62,7 +62,7 @@ const navigator = createBottomTabNavigator({
           iconName = 'ios-search';
         }
         else if(routeName == 'Brightness'){
-          iconName = 'settings-brightness';
+          iconName = 'md-sunny';
         }
         else if(routeName == 'About'){
           iconName = 'ios-information-circle-outline';
