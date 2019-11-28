@@ -13,7 +13,7 @@ export default class Page5 extends React.Component {
     return (
         <View style={{flex: 1,alignContent:'center'}} >
 
-          <View style={{flex:1}}>
+          <View style={{flex:1, marginTop: 520}} >
             <TouchableOpacity
             style={styles.btn}
             onPress={()=>this.onPressNext()}>
