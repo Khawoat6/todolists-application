@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View,Alert,TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View,Alert,TouchableOpacity, TextInput} from 'react-native';
 
 export default class Page2 extends React.Component {
 
@@ -7,10 +7,13 @@ export default class Page2 extends React.Component {
     return (
         <View style={{flex: 1,alignContent:'center'}} >
 
-          <Text
-              style={styles.txt}>
-              Search
-          </Text>
+          <Text style={styles.txt}>Search</Text>
+          <TextInput
+                style={styles.txtIn2}
+                placeholder="Search for a list or item"
+                onChangeText={this.onChangeTextEmail}
+          />
+
 
 
         </View>
@@ -36,6 +39,18 @@ const styles = StyleSheet.create({
       paddingLeft:20,
       paddingRight:20,
 
+  },
+
+  txtIn2: {
+    alignItems: 'center',
+    // height: 50,
+    backgroundColor: 'transparent',
+    padding: 16,
+    marginLeft:16,
+    marginRight:16,
+    borderColor: 'black',
+    borderWidth: 1,
+    borderRadius: 50,
   },
 
 })
