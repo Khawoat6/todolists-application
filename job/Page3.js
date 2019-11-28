@@ -10,9 +10,11 @@ import * as Brightness from 'expo-brightness';
 import * as Permissions from 'expo-permissions';
 import { Animated,Easing } from 'react-native';
 export default class Page3 extends React.Component {
-  constructor () {
-  super()
-  this.spinValue = new Animated.Value(0)
+
+
+    constructor () {
+    super()
+    this.springValue = new Animated.Value(1)
   }
   state = {
       brightnessValue:0
@@ -35,35 +37,28 @@ export default class Page3 extends React.Component {
     Brightness.setSystemBrightnessAsync(value)
     };
 
-componentDidMount () {
-  this.spin()
-}
-spin () {
-  this.spinValue.setValue(0)
-  Animated.timing(
-    this.spinValue,
-    {
-      toValue: 1,
-      duration: 4000,
-      easing: Easing.linear
+    spring () {
+      this.springValue.setValue(0.3)
+      Animated.spring(
+        this.springValue,
+        {
+          toValue: 1,
+          friction: 1
+        }
+      ).start()
     }
-  ).start(() => this.spin())
-}
-
 
   render() {
-    const spin = this.spinValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg']
-    })
+
     return (
       <LinearGradient
    colors={['#FFFFFF', '#000000']}
    style={{flex: 1}}>
 
   <View style={{flex:1,justifyContent: 'center',alignItems:'center'}}>
+
   <Animated.Image source={{uri: 'https://img.icons8.com/ios/150/000000/sun.png'}}
-       style={{width: 100, height: 100,transform: [{rotate: spin}]}} />
+       style={{width: 100, height: 100,transform: [{scale: this.springValue}]}} />
 
     <ColumnSlider onChange={this.onChangebrightnessValue}
           height={300}
@@ -72,6 +67,7 @@ spin () {
           minimumTrackTintColor='#FFFFFF'
           maximumTrackTintColor='#262424'
           textStyle={{ fontSize: 1 }}
+          onComplete={this.spring.bind(this)}
     />
   </View>
   </LinearGradient>
