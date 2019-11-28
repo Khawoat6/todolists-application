@@ -48,19 +48,19 @@ class Items2 extends React.Component {
 
     return (
       <View style={styles.sectionContainer}>
-        <Text style={styles.sectionHeading}>Todo</Text>
         {items.map(({ id, done, value }) => (
           <TouchableOpacity
             key={id}
             onPress={() => this.props.onPressTodo(id)}
             style={{
-              backgroundColor: "#fff",
-              borderColor: "#000",
+              backgroundColor: 'transparent',
+              borderColor: '#DADADA',
               borderWidth: 1,
-              padding: 8
+              padding: 12,
+              borderRadius: 20,
             }}
           >
-            <Text style={{ color:"#000" }}>{value}</Text>
+            <Text style={{ color:"#000", paddingLeft:30, }}>{value}</Text>
           </TouchableOpacity>
         ))}
       </View>

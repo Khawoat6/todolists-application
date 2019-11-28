@@ -16,7 +16,6 @@ import { LinearGradient } from 'expo-linear-gradient'
 // import HeaderNavigationBar from './HeaderNavigationBar'
 import database from '../components/Database'
 
-
 export default class App extends React.Component {
 
 
@@ -79,36 +78,43 @@ export default class App extends React.Component {
   render() {
     return (
       <LinearGradient
-       colors={['#7F7FD5', '#86A8E7', '#91EAE4']}
+       colors={['#FFFFFF', '#FFFFFF']}
        style={{flex: 1}}>
-         
-      <View style={{flex:1,justifyContent: 'center'}}>
-          <TextInput
-              style={styles.nameInput}
-              placeholder="What do you need to do ?"
-              onChangeText={this.onChangeText}/>
 
-          <TouchableOpacity
-              style={styles.touchableUser}
-              onPress={this.onPressAdd}>
-              <Text style={{fontSize:20, color:'#ffffff',textAlign:'center'}}>Create</Text>
-          </TouchableOpacity>
+        <View style={{flex:1,flexDirection: 'row', marginTop:25}}>
+              <View>
+                <TextInput
+                  style={styles.txtIn2}
+                  placeholder="insert item"
+                  onChangeText={this.onChangeText}/>
+              </View>
 
-          <ScrollView style={styles.listArea}>
-              <Items2
-                  ref={todo => (this.todo = todo)}
-                  onPressTodo={this.change_Doing}
-                    />
-              <Items3
-                  ref={todoing => (this.todoing = todoing)}
-                  onPressDoing={this.change_Complete}
-                    />
-              <Items4
-                  ref={todone => (this.todone = todone)}
-                  onPressComplate={this.delete_Complete}
-                    />
-        </ScrollView>
-      </View>
+              <View>
+                <TouchableOpacity
+                  style={styles.btn_register}
+                  onPress={this.onPressAdd}>
+                  <Text style={{fontSize:20, color:'#ffffff',textAlign:'center'}}>+</Text>
+                </TouchableOpacity>
+              </View>
+        </View>
+
+
+        <View style={{flex:1, marginTop:30}}>
+              <ScrollView style={styles.listArea}>
+                  <Items2
+                      ref={todo => (this.todo = todo)}
+                      onPressTodo={this.change_Doing}
+                        />
+                  <Items3
+                      ref={todoing => (this.todoing = todoing)}
+                      onPressDoing={this.change_Complete}
+                        />
+                  <Items4
+                      ref={todone => (this.todone = todone)}
+                      onPressComplate={this.delete_Complete}
+                        />
+              </ScrollView>
+          </View>
       </LinearGradient>
     );
   }
@@ -140,7 +146,7 @@ const styles = StyleSheet.create({
   listArea: {
     backgroundColor: "transparent",
     flex: 1,
-    paddingTop: 16
+    // paddingTop: 16
   },
   sectionContainer: {
     marginBottom: 16,
@@ -196,4 +202,33 @@ const styles = StyleSheet.create({
       textAlign: 'center',
       fontSize:50
     },
+
+    txtIn2: {
+      alignItems: 'center',
+      width:280,
+      height:50,
+      backgroundColor: 'transparent',
+      padding: 16,
+      marginLeft:16,
+      marginRight:16,
+      borderColor: 'black',
+      borderWidth: 1,
+      borderRadius: 50,
+    },
+
+    btn_register:{
+      alignItems: 'center',
+      width:50,
+      height:50,
+      backgroundColor: '#000000',
+      padding: 16,
+      marginLeft:16,
+      marginRight:16,
+      borderRadius: 50,
+      borderColor:'#000000',
+      borderWidth : 1
+    },
+
+
+
 });
