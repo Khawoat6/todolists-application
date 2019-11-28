@@ -81,40 +81,43 @@ export default class App extends React.Component {
        colors={['#FFFFFF', '#FFFFFF']}
        style={{flex: 1}}>
 
-        <View style={{flex:1,flexDirection: 'row', marginTop:25}}>
-              <View>
-                <TextInput
+
+        <View style={{flex:1,justifyContent: 'center', marginTop:16,}}>
+              <View style={{flex: 1, flexDirection: 'row', alignSelf:'center', marginTop:16, }}>
+                <View>
+                  <TextInput 
                   style={styles.txtIn2}
                   placeholder="insert item"
-                  onChangeText={this.onChangeText}/>
+                  onChangeText={this.onChangeText}
+                  />
+                </View>
+                <View>
+                  <TouchableOpacity
+                    style={styles.btn_register}
+                    onPress={this.onPressAdd}>
+                    <Text style={{fontSize:20, color:'#ffffff',textAlign:'center'}}>+</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
 
-              <View>
-                <TouchableOpacity
-                  style={styles.btn_register}
-                  onPress={this.onPressAdd}>
-                  <Text style={{fontSize:20, color:'#ffffff',textAlign:'center'}}>+</Text>
-                </TouchableOpacity>
+              <View style={{flex: 7,flexDirection:'column', marginTop:16}}>
+                  <ScrollView style={styles.listArea}>
+                    <Items2
+                        ref={todo => (this.todo = todo)}
+                        onPressTodo={this.delete_Complete}
+                          />
+                    <Items3
+                        ref={todoing => (this.todoing = todoing)}
+                        onPressDoing={this.change_Complete}
+                          />
+                    <Items4
+                        ref={todone => (this.todone = todone)}
+                        onPressComplate={this.delete_Complete}
+                          />
+                   </ScrollView>
+                
               </View>
-        </View>
-
-
-        <View style={{flex:1, marginTop:30}}>
-              <ScrollView style={styles.listArea}>
-                  <Items2
-                      ref={todo => (this.todo = todo)}
-                      onPressTodo={this.change_Doing}
-                        />
-                  <Items3
-                      ref={todoing => (this.todoing = todoing)}
-                      onPressDoing={this.change_Complete}
-                        />
-                  <Items4
-                      ref={todone => (this.todone = todone)}
-                      onPressComplate={this.delete_Complete}
-                        />
-              </ScrollView>
-          </View>
+        </View> 
       </LinearGradient>
     );
   }
@@ -222,7 +225,6 @@ const styles = StyleSheet.create({
       height:50,
       backgroundColor: '#000000',
       padding: 16,
-      marginLeft:16,
       marginRight:16,
       borderRadius: 50,
       borderColor:'#000000',

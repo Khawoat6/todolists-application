@@ -58,9 +58,10 @@ class Items2 extends React.Component {
               borderWidth: 1,
               padding: 12,
               borderRadius: 20,
+              marginTop:12,
             }}
           >
-            <Text style={{ color:"#000", paddingLeft:30, }}>{value}</Text>
+            <Text style={{ color:"#000", paddingLeft:25, }}>{value}</Text>
           </TouchableOpacity>
         ))}
       </View>
@@ -98,6 +99,8 @@ const styles = StyleSheet.create({
   },
   sectionContainer: {
     marginBottom: 16,
+    padding:16,
+    margin:16,
     marginHorizontal: 16
   },
   sectionHeading: {
