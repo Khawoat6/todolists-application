@@ -1,8 +1,7 @@
 import React from 'react';
-import {StyleSheet,Text,View,Image,TextInput,Button,TouchableOpacity,Picker,Alert,} from 'react-native';
+import {StyleSheet,Text,View,Image,TextInput,Button,TouchableOpacity,Picker,Alert,AsyncStorage} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import database from './Database'
-
 
 export default class Login2 extends React.Component {
   state = {
@@ -15,7 +14,7 @@ export default class Login2 extends React.Component {
       email:this.state.email,
       password:this.state.password,
     }
-    database.login(account,this.login_success,this.login__fail);
+    database.login(account,this._storeData,this.login__fail);
 
   };
 
@@ -33,6 +32,19 @@ export default class Login2 extends React.Component {
     Alert.alert("Wrong Password or Email");
   }
 
+
+
+  _storeData = async () => {
+    try {
+      await AsyncStorage.setItem('@MySuperStore:key',this.state.email);
+      Alert.alert("Login Success");
+      this.props.navigation.navigate('BottomNavigationScreen')
+    } catch (error) {
+      // Error saving data
+    }
+  };
+
+  
 
   onChangeTextEmail = email => this.setState({email});
   onChangeTextPassword = password => this.setState({password});

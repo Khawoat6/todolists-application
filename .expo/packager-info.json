@@ -1,9 +1,9 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 71402,
+  "expoServerNgrokUrl": "https://hn-ym8.khawoat231239.todolists-applications.exp.direct",
+  "packagerNgrokUrl": "https://packager.hn-ym8.khawoat231239.todolists-applications.exp.direct",
+  "ngrokPid": 71418
 }
