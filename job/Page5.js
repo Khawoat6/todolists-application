@@ -33,8 +33,8 @@ export default class Page5 extends React.Component {
   render() {
     return (
         <View style={{flex: 1,alignContent:'center'}} >
-          <Text style={{ color:"#000000", paddingLeft:25, }}>{this.state.value}</Text>
-          <View style={{flex:1, marginTop: 520}} >
+          <Text style={styles.txt2}>{this.state.value}</Text>
+          <View style={{flex:1, marginTop: 400}} >
             <TouchableOpacity
             style={styles.btn}
             onPress={()=>this.onPressNext()}>
@@ -65,5 +65,12 @@ const styles = StyleSheet.create({
       color:'#ffffff',
       fontWeight:'bold',
   },
+  txt2:{
+    textAlign: 'center',
+    fontSize:30,
+    color:'#000000',
+    fontWeight:'bold',
+    marginTop:100,
+},
 
 })

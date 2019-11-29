@@ -41,7 +41,7 @@ const stackPage5 = createStackNavigator({
 const navigator = createBottomTabNavigator({
     Home:{screen:stackPage1,navigationOptions: {
     }},
-    Search:{screen:stackPage2,navigationOptions: {
+    Calculator:{screen:stackPage2,navigationOptions: {
     }},
     Brightness:{screen:stackPage3,navigationOptions: {
     }},
@@ -58,8 +58,8 @@ const navigator = createBottomTabNavigator({
         if (routeName == 'Home') {
           iconName = 'md-home';
         }
-        else if(routeName == 'Search'){
-          iconName = 'ios-search';
+        else if(routeName == 'Calculator'){
+          iconName = 'md-calculator';
         }
         else if(routeName == 'Brightness'){
           iconName = 'md-sunny';

@@ -1,198 +1,226 @@
-import React from 'react';
-import { StyleSheet, Text, View,Alert,TouchableOpacity, TextInput,AsyncStorage, ScrollView,} from 'react-native';
-import Items2 from './Items2'
-import Items3 from './Items3'
-import Items4 from './Items4'
-import database from '../components/Database'
-import { LinearGradient } from 'expo-linear-gradient'
+import React, { Component } from "react";
+import { StyleSheet, Platform, View, Text, ToastAndroid, ScrollView } from "react-native";
+import NumberButtons from "../components/NumberButtons";
+import HistoryView from "../components/HistoryView";
+const buttons = [
+  ["C", "+/-", "%", "÷"],
+  ["7", "8", "9", "x"],
+  ["4", "5", "6", "+"],
+  ["1", "2", "3", "-"],
+  [".", "0", "Del", "="]
+];
+const initialOutput = "0";
+const maxLength = 57;
 
-export default class Page2 extends React.Component {
 
+export default class Page2 extends Component {
   constructor(props) {
-    super(props)
-  
-  }
-  
-  state = {
-    // writeText:'',
-    text: null,
-    readText: '',
-  };
-
-
-
-  onPressText= async() => {
-    await AsyncStorage.setItem('key1',this.state.text);
-  };
-
-  onPressRead=async()=>{
-    const value = await AsyncStorage.getItem('key1');
-    this.setState({readText:value});
+    super(props);
+    this.state = {
+      _output: initialOutput,
+      _mathExpression: "",
+      _history: []
+    };
+    this._handleEvent = this._handleEvent.bind(this);
+    this._clearHistory = this._clearHistory.bind(this);
   }
 
-  state = {
-    text: null
-  };
 
-  componentDidMount() {
-    this.update();
-  }
+  _handleEvent = value => {
+    if (!isNaN(value) || value == ".") {
+      this._concatToOutput(value);
+    } else {
+      switch (value) {
+        case buttons[0][0]:
+          this._initOutput();
+          break;
 
-  onChangeText = text => this.setState({ text });
+        case buttons[4][2]:
+          if (this.state._output.length === 1) {
+            this._initOutput();
+          } else {
+            this._replaceLastIndex("");
+          }
+          break;
 
-  onPressAdd = () => {
-    this.addText();
-    this.setState({ text: null });
-  };
+        case buttons[4][3]:
+          this._evaluate();
+          break;
 
-  addText() {
-    if (this.state.text === null || this.state.text === "") {
-      return false;
+        case buttons[0][2]:
+          this._inputPercent();
+          break;
+
+        case buttons[0][1]:
+          this._toggleSign();
+          break;
+
+        default:
+          let strLastChar = this.state._output.slice(-1);
+          if (isNaN(strLastChar)) {
+            this._replaceLastIndex(value);
+          } else {
+            this._concatToOutput(value);
+          }
+          break;
+      }
     }
-
-    database.putText(this.state.text, this.add_text_success, this.add_text_fail);
-
-
+  };
+  _concatToOutput = value => {
+    if (this.state._output.length >= maxLength) {
+      this._showToast(
+        "Maximum Expression Length of " + maxLength + " is reached."
+      );
+    } else {
+      if (this.state._output !== initialOutput) {
+        this.setState({ _output: this.state._output + "" + value + "" });
+      } else {
+        this.setState({ _output: value + "" });
+      }
+    }
+  };
+  _replaceLastIndex = value => {
+    var str1 = this.state._output.replace(/.$/, value);
+    this.setState({
+      _output: str1
+    });
   };
 
-  add_text_success=async()=>{
-    this.update();
-  }
+  _evaluate = () => {
+    try {
+      let strCurOutput = this.state._output;
+      if (isNaN(strCurOutput)) {
+        let dEval = eval(this._convertToMathExpression(this.state._output));
 
-  add_text_fail=async(error)=>{
-    console.log(error);
-  }
+        let aHistory = [...this.state._history];
+        aHistory.push([strCurOutput, dEval]);
 
-  change_Complete=(id)=>{
-    database.updateText2(id);
-    this.update();
-  }
+        this.setState({
+          _output: "" + dEval,
+          _history: aHistory
+        });
+      }
+    } catch (exception) {
 
-  change_Doing=(id)=>{
-    database.updateText(id);
-    this.update();
-  }
-
-
-  delete_Complete=(id)=>{
-    database.deleteText(id);
-    this.update();
-  }
-
-  update (){
-    this.todo.update();
-    this.todone.update();
-    this.todoing.update();
+      this._showToast("Invalid format used.");
+    }
   };
 
+  _toggleSign() {
+    let output = this.state._output;
+    let newValue = parseFloat(output) * -1;
 
+    this.setState({
+      _output: String(newValue)
+    });
+  }
 
+  _inputPercent = () => {
+    let output = this.state._output;
+    let currentValue = parseFloat(output);
 
+    if (currentValue === 0) return;
+
+    const fixedDigits = output.replace(/^-?\d*\.?/, "");
+    const newValue = parseFloat(output) / 100;
+
+    this.setState({
+      _output: String(newValue.toFixed(fixedDigits.length + 2))
+    });
+  };
+
+  _convertToMathExpression = value => {
+    let strTemp = value.replace(
+      new RegExp(this._escapeRegExp(buttons[0][3]), "g"),
+      "/"
+    );
+    strTemp = strTemp.replace(
+      new RegExp(this._escapeRegExp(buttons[1][3]), "g"),
+      "*"
+    );
+    return strTemp;
+  };
+
+  _escapeRegExp = str => {
+    return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+  };
+
+  _initOutput = () => {
+    this.setState({
+      _output: initialOutput
+    });
+  };
+
+  _clearHistory = () => {
+    console.log("inside _clearHistory function");
+    const emptyArray = [];
+    this.setState({
+      _history: emptyArray
+    });
+  };
+
+  _showToast = value => {
+    ToastAndroid.show(value, ToastAndroid.SHORT);
+  };
 
   render() {
     return (
-
-      <LinearGradient
-       colors={['#FFFFFF', '#FFFFFF']}
-       style={{flex: 1}}>
-
-
-        <Text style={styles.txt}>Search</Text>
-        <View style={{flex:1,justifyContent: 'center', marginTop:16,}}>
-              <View style={{flex: 1, flexDirection: 'row', alignSelf:'center', marginTop:16, }}>
-                <View>
-                <TextInput 
-                  style={styles.txtIn2}
-                  placeholder="Search for a list or item"
-                  onChangeText={this.onChangeText}
-                  />
-                </View>
-                <View>
-                  <TouchableOpacity
-                    style={styles.btn_register}
-                    onPress={this.onPressAdd}>
-                    <Text style={{fontSize:20, color:'#ffffff',textAlign:'center'}}>+</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View style={{flex: 7,flexDirection:'column', marginTop:16}}>
-                  <ScrollView style={styles.listArea}>
-                    <Items2
-                        ref={todo => (this.todo = todo)}
-                        onPressTodo={this.delete_Complete}
-                          />
-                    <Items3
-                        ref={todoing => (this.todoing = todoing)}
-                        onPressDoing={this.change_Complete}
-                          />
-                    <Items4
-                        ref={todone => (this.todone = todone)}
-                        onPressComplate={this.delete_Complete}
-                          />
-                   </ScrollView>
-                
-              </View>
-        </View> 
-      </LinearGradient>
-
-
-
-
-
+      <View style={styles.container}>
+        <View style={styles.contHistory}>
+          <HistoryView
+            data={this.state._history}
+            onClear={this._clearHistory}
+          />
+        </View>
+        <View style={styles.contOutput}>
+          <View style={styles.placeHolderOutput}>
+            <Text style={styles.txtDefault}>{this.state._output}</Text>
+          </View>
+        </View>
+        <View style={styles.contButtons}>
+          <NumberButtons onBtnPress={this._handleEvent} buttons={buttons} />
+        </View>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-   btn:{
-      alignItems: 'center',
-      height:50,
-      backgroundColor: '#86A8E7',
-      padding: 10,
-      margin:10,
-      borderRadius: 50,
-      borderColor:'white',
-      borderWidth : 1
-  },
-  txt:{
-      textAlign: 'left',
-      fontSize:50,
-      padding:50,
-      paddingLeft:20,
-      paddingRight:20,
 
-  },
-
-  txtIn2: {
-    alignItems: 'center',
-    width:280,
-    height:50,
-    backgroundColor: 'transparent',
-    padding: 16,
-    marginLeft:16,
-    marginRight:16,
-    borderColor: 'black',
-    borderWidth: 1,
-    borderRadius: 50,
-  },
-
-  btn_register:{
-    alignItems: 'center',
-    width:50,
-    height:50,
-    backgroundColor: '#000000',
-    padding: 16,
-    marginRight:16,
-    borderRadius: 50,
-    borderColor:'#000000',
-    borderWidth : 1
-  },
-
-  listArea: {
-    backgroundColor: "transparent",
+  container: {
     flex: 1,
-    // paddingTop: 16
+    flexDirection: "column"
   },
+
+  contHistory: {
+    flex: 0.3,
+    borderBottomWidth: 1,
+    borderColor: "#2c3e50"
+  },
+
+  contOutput: {
+    flex: 0.1
+  },
+
+  contButtons: {
+    flex: 0.6,
+    backgroundColor: "#2c3e50"
+  },
+
+  placeHolderOutput: {
+    flex: 1,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "flex-end",
+    paddingRight: 15,
+    paddingLeft: 15
+  },
+
+  txtDefault: {
+    color: "#000",
+    fontFamily: "System",
+    fontSize: 30
+  }
+
 
 })
