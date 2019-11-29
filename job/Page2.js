@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View,Alert,TouchableOpacity, TextInput} from 'react-native';
 
+
 export default class Page2 extends React.Component {
 
   render() {
@@ -13,7 +14,6 @@ export default class Page2 extends React.Component {
                 placeholder="Search for a list or item"
                 onChangeText={this.onChangeTextEmail}
           />
-
 
 
         </View>
